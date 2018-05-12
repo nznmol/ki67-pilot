@@ -1,7 +1,7 @@
 from tf_unet import unet, util, image_util
 
 #preparing data loading
-data_provider = image_util.ImageDataProvider("/home/naz/data/ki67-pilot")
+data_provider = image_util.ImageDataProvider("/home/naz/data/ki67-pilot/*.tif")
 
 #setup & training
 net = unet.Unet(layers=3, features_root=64, channels=3, n_class=2)
