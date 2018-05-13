@@ -1,6 +1,6 @@
 from tf_unet import unet, util, image_util
 import os
-import path
+from os import path
 
 #preparing data loading
 data_root = os.getenv("DATA_ROOT")
