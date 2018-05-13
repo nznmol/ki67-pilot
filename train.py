@@ -1,7 +1,11 @@
 from tf_unet import unet, util, image_util
+import os
+import path
 
 #preparing data loading
-data_provider = image_util.ImageDataProvider("/home/naz/data/ki67-pilot/*.tif")
+data_root = os.getenv("DATA_ROOT")
+train_data = path.join(data_root, "train", "*.tif")
+data_provider = image_util.ImageDataProvider(train_data)
 
 #setup & training
 net = unet.Unet(layers=3, features_root=64, channels=3, n_class=2)
@@ -10,8 +14,8 @@ path = trainer.train(data_provider, "./unet_trained", training_iters=32, epochs=
 
 #verification
 
-test_data_provider = \
-        image_util.ImageDataProvider("home/naz/data/ki67-pilot-testtest")
+test_data = path.join(data_root, "test", "*.tif")
+test_data_provider = image_util.ImageDataProvider(test_data)
 
 x_test, _ = test_data_provider(1)
 
