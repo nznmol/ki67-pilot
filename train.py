@@ -31,13 +31,17 @@ def verify(data_root, net, model_path):
 #unet.error_rate(prediction, util.crop_to_shape(label, prediction.shape))
 
 def main():
-    data_root = os.getenv("DATA_ROOT")
-    #data_provider = prepare_data(data_root)
     net = setup_network()
-    #model_path = train(data_provider, net)
-    model_path = path.join(os.path.dirname(os.path.realpath(__file__)),
+    data_root = os.getenv("DATA_ROOT", os.path.join(
+        os.path.dirname(os.path.realpath(__file__)), "data"))
+    if os.getenv("TRAIN") != None:
+        data_provider = prepare_data(data_root)
+        model_path = train(data_provider, net)
+    else:
+        model_path = path.join(os.path.dirname(os.path.realpath(__file__)),
             "unet_trained", "model.ckpt")
-    verify(data_root, net, model_path)
+    if os.getenv("VERIFY") != None:
+        verify(data_root, net, model_path)
 
 if __name__ == "__main__":
     main()
