@@ -10,7 +10,7 @@ def prepare_data(data_root):
 
 #setup network
 def setup_network():
-    return unet.Unet(layers=3, features_root=64, channels=3, n_class=2)
+    return unet.Unet(layers=2, features_root=64, channels=3, n_class=2)
 
 #training
 def train(data_provider, net):
