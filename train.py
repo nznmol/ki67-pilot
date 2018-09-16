@@ -2,10 +2,11 @@
 from tf_unet import unet, util, image_util
 import os
 from os import path
+import numpy as np
 
 #preparing data loading
 def prepare_data(data_root):
-    train_data = path.join(data_root, "train", "*.tif")
+    train_data = path.join(data_root, "train", "*small.tif")
     return image_util.ImageDataProvider(train_data)
 
 #setup network
@@ -32,10 +33,28 @@ def verify(data_root, net, model_path):
 
 #unet.error_rate(prediction, util.crop_to_shape(label, prediction.shape))
 
+def inspect_data(data_root):
+    data_provider = prepare_data(data_root)
+    ### INSPECT THE FREAKIN DATA
+    np.set_printoptions(edgeitems=int(os.getenv("ROWS", "80")),
+            linewidth=320,precision=2)
+    x,y = data_provider(1)
+    x = x.reshape(50,50,3)
+    one_x = x[:,:,0]
+    y = y.reshape(50,50,2)
+    y = np.delete(y,1,axis=2)
+    print(x.shape)
+    print(y.shape)
+    #print(x)
+    print(np.matrix(one_x))
+    print(np.matrix(y))
+
 def main():
     net = setup_network()
     data_root = os.getenv("DATA_ROOT", os.path.join(
         os.path.dirname(os.path.realpath(__file__)), "data"))
+    if os.getenv("INSPECT") != None:
+        inspect_data(data_root)
     if os.getenv("TRAIN") != None:
         data_provider = prepare_data(data_root)
         model_path = train(data_provider, net)
