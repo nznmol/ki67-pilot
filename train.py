@@ -5,8 +5,8 @@ from os import path
 import numpy as np
 
 #preparing data loading
-def prepare_data(data_root):
-    train_data = path.join(data_root, "train", "*small.tif")
+def prepare_data(data_root, img_glob):
+    train_data = path.join(data_root, "train", img_glob)
     return image_util.ImageDataProvider(train_data)
 
 #setup network
@@ -34,7 +34,8 @@ def verify(data_root, net, model_path):
 #unet.error_rate(prediction, util.crop_to_shape(label, prediction.shape))
 
 def inspect_data(data_root):
-    data_provider = prepare_data(data_root)
+    inspect_img_glob = os.getenv("INSPECT_GLOB", "*small.tif")
+    data_provider = prepare_data(data_root,inspect_img_glob)
     ### INSPECT THE FREAKIN DATA
     np.set_printoptions(edgeitems=int(os.getenv("ROWS", "80")),
             linewidth=320,precision=2)
@@ -56,7 +57,8 @@ def main():
     if os.getenv("INSPECT") != None:
         inspect_data(data_root)
     if os.getenv("TRAIN") != None:
-        data_provider = prepare_data(data_root)
+        train_img_glob = os.getenv("TRAIN_IMG_GLOB", "*.tif")
+        data_provider = prepare_data(data_root, train_img_glob)
         model_path = train(data_provider, net)
     else:
         model_path = path.join(os.path.dirname(os.path.realpath(__file__)),
