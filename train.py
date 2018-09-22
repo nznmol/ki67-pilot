@@ -9,8 +9,8 @@ def prepare_data(data_root):
     return image_util.ImageDataProvider(train_data)
 
 #setup network
-def setup_network():
-    return unet.Unet(layers=2, features_root=64, channels=3, n_class=2)
+def setup_network(layers, features_root):
+    return unet.Unet(layers=layers, features_root=features_root, channels=3, n_class=2)
 
 #training
 def train(data_provider, net):
@@ -33,7 +33,9 @@ def verify(data_root, net, model_path):
 #unet.error_rate(prediction, util.crop_to_shape(label, prediction.shape))
 
 def main():
-    net = setup_network()
+    layers = int(os.getenv("LAYERS", "2"))
+    features = int(os.getenv("FEATURES", "64"))
+    net = setup_network(layers, features)
     data_root = os.getenv("DATA_ROOT", os.path.join(
         os.path.dirname(os.path.realpath(__file__)), "data"))
     if os.getenv("TRAIN") != None:
