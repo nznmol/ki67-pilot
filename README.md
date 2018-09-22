@@ -20,6 +20,12 @@ For each image `$IMAGE.tif` in the training set, we expect to find an image
 
 ## Configuration
 
-Config variables are set through the environment:
+Config variables are set through the environment, default values given in
+parantheses:
 
-- `DATA_ROOT` path to data root directory
+- `DATA_ROOT` (`$PWD/data`) path to data root directory
+- `TRAIN` set if you want to train
+- `VERIFY` set if you want to verify
+- `EPOCHS` (10) number of epochs for training
+- `FEATURES` (64) number of features
+- `LAYERS` (2) number of layers
