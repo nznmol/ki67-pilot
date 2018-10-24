@@ -2,6 +2,16 @@
 from tf_unet import unet, util, image_util
 import os
 from os import path
+import tensorflow as tf
+from functools import reduce
+
+#count variables
+def count_params():
+    "print number of trainable variables"
+    size = lambda v: reduce((lambda x, y: x*y), v.get_shape().as_list())
+    n = sum(size(v) for v in tf.trainable_variables())
+    print("Model size: %dK" % (n/1000,))
+
 
 #preparing data loading
 def prepare_data(data_root):
@@ -40,6 +50,7 @@ def main():
     net = setup_network(layers, features)
     data_root = os.getenv("DATA_ROOT", os.path.join(
         os.path.dirname(os.path.realpath(__file__)), "data"))
+    count_params()
     if os.getenv("TRAIN") != None:
         data_provider = prepare_data(data_root)
         model_path = train(data_provider, net)
