@@ -15,7 +15,7 @@ def setup_network():
 
 #training
 def train(data_provider, net):
-    trainer = unet.Trainer(net)
+    trainer = unet.Trainer(net, batch_size=4)
     epochs = os.getenv("EPOCHS", "10")
     epochs = int(epochs)
     model_path = trainer.train(data_provider, "./unet_trained",
