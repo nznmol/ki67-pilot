@@ -14,11 +14,13 @@ def setup_network(layers, features_root):
 
 #training
 def train(data_provider, net):
-    trainer = unet.Trainer(net)
-    epochs = os.getenv("EPOCHS", "10")
-    epochs = int(epochs)
+    trainer = unet.Trainer(net, batch_size=1, verification_batch_size=4)
+    epochs = int(os.getenv("EPOCHS", "10"))
+    display_step = int(os.getenv("DISPLAY_STEP", "1"))
+    restore_model = True if os.getenv("RESTORE_MODEL") else False
     model_path = trainer.train(data_provider, "./unet_trained",
-            training_iters=32, epochs=epochs)
+            training_iters=32, epochs=epochs, display_step=display_step,
+            restore=restore_model)
     return model_path
 
 #verification
